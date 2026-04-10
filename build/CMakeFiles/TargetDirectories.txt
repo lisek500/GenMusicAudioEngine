@@ -1,0 +1,3 @@
+C:/Users/mati5/Desktop/Programming/GenMusicAudioEngine/build/CMakeFiles/GenMusicAudioEngine.dir
+C:/Users/mati5/Desktop/Programming/GenMusicAudioEngine/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/mati5/Desktop/Programming/GenMusicAudioEngine/build/CMakeFiles/ZERO_CHECK.dir

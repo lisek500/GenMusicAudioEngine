@@ -204,7 +204,11 @@ int main()
 
 	std::cout << "Audio running for ever... \n";
 	
-	std::this_thread::sleep_for(std::chrono::seconds(5000));
+	while (true)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	
 
 	running = false;
 

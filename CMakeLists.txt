@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.20)
+project(GenMusicAudioEngine LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_executable(GenMusicAudioEngine
+    GenMusicAudioEngine.cpp
+ 	AudioEngine.cpp
+	Delay.cpp
+	EnvFollower.cpp
+	HighPassFilter.cpp
+	LFO.cpp
+	LowPassFilter.cpp
+	NotePitch.cpp
+	NoteValue.cpp
+	Oscillator.cpp
+	Oscilloscope.cpp
+	Panner.cpp
+	Scale.cpp
+	Sequencer.cpp
+	WhiteNoiseGenerator.cpp
+)   
+
+target_include_directories(GenMusicAudioEngine PRIVATE .)
+
+target_include_directories(GenMusicAudioEngine PRIVATE "C:/Users/mati5/Desktop/Programming/Libs/portaudio/include")
+
+target_link_libraries(GenMusicAudioEngine PRIVATE "C:/Users/mati5/Desktop/Programming/Libs/portaudio-build/Release/portaudio_static_x64.lib")
+
