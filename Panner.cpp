@@ -18,6 +18,8 @@ AudioOutput Panner::processSample(float input)
 	
 	output.right = input * sin(pan_ * pi / 2); 
 
+	output.mono = input;
+
 		return output;
 
 }

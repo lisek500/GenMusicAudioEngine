@@ -24,23 +24,23 @@ void AudioEngine::prepare(double sampleRate, int blockSize)
 	BPM_ = 30.0f;
 
 	//sequencer 1
-	scale_1.setRoot(Notes::C, 3);
-	scale_1.setScale(Scale::PENTATONIC_MAJOR);
+	scale_1.setRoot(Notes::A, 2);
+	scale_1.setScale(Scale::PENTATONIC_MINOR);
 	scaleSize_1 = scale_1.getScaleSize();
 	sequencer_1.prepare(sampleRate_,1.0f, BPM_);
 	sequencer_1.generateRandomSteps(16, scaleSize_1, NoteValue::WHOLE);
 
 
 	//sequencer 2
-	scale_2.setRoot(Notes::C, 4);
-	scale_2.setScale(Scale::PENTATONIC_MAJOR);
+	scale_2.setRoot(Notes::E, 4);
+	scale_2.setScale(Scale::PENTATONIC_MINOR);
 	scaleSize_2 = scale_2.getScaleSize();
 	sequencer_2.prepare(sampleRate_, 1.0f, BPM_);
 	sequencer_2.generateRandomSteps(12, scaleSize_2, NoteValue::QUARTER);
 
 	//sequencer 3
-	scale_3.setRoot(Notes::C, 5);
-	scale_3.setScale(Scale::PENTATONIC_MAJOR);
+	scale_3.setRoot(Notes::E, 5);
+	scale_3.setScale(Scale::PENTATONIC_MINOR);
 	scaleSize_3 = scale_3.getScaleSize();
 	sequencer_3.prepare(sampleRate_, 1.0f, BPM_);
 	sequencer_3.generateRandomSteps(16, scaleSize_3, NoteValue::SIXTEENTH);
@@ -99,8 +99,8 @@ AudioOutput AudioEngine::processSample(float input)
 	sequencer_1.update(env);
 	if (sequencer_1.bConsumeLoopWrapped(true))
 	{
-		scale_1.setRoot(Notes::C, 3);
-		scale_1.setScale(Scale::PENTATONIC_MAJOR);
+		scale_1.setRoot(Notes::A, 2);
+		scale_1.setScale(Scale::PENTATONIC_MINOR);
 		scaleSize_1 = scale_1.getScaleSize();
 		sequencer_1.generateRandomSteps(16, scaleSize_1, NoteValue::WHOLE);
 	}
@@ -114,8 +114,8 @@ AudioOutput AudioEngine::processSample(float input)
 	 sequencer_2.update(env);
 	 if (sequencer_2.bConsumeLoopWrapped(true))
 	 {
-		 scale_2.setRoot(Notes::C, 4);
-		 scale_2.setScale(Scale::PENTATONIC_MAJOR);
+		 scale_2.setRoot(Notes::E, 4);
+		 scale_2.setScale(Scale::PENTATONIC_MINOR);
 		 scaleSize_2 = scale_2.getScaleSize();
 		 sequencer_2.generateRandomSteps(12, scaleSize_2, NoteValue::QUARTER);
 	 }
@@ -131,8 +131,8 @@ AudioOutput AudioEngine::processSample(float input)
 	 sequencer_3.update(env);
 	 if (sequencer_3.bConsumeLoopWrapped(true))
 	 {
-		 scale_3.setRoot(Notes::C, 5);
-		 scale_3.setScale(Scale::PENTATONIC_MAJOR);
+		 scale_3.setRoot(Notes::E, 5);
+		 scale_3.setScale(Scale::PENTATONIC_MINOR);
 		 scaleSize_3 = scale_1.getScaleSize();
 		 sequencer_3.generateRandomSteps(16, scaleSize_3, NoteValue::SIXTEENTH);
 	 }
@@ -184,6 +184,7 @@ AudioOutput AudioEngine::processSample(float input)
 	//LFO Panning
 	panner_ch1_.setPan(lfoFreq);
 	panner_ch2_.setPan(1.0f - lfoFreq);
+	panner_mono.setPan(1.0f);
 
 	/*panner_ch1_.setPan(0.5f);
 	panner_ch2_.setPan(0.5f);*/
@@ -212,13 +213,14 @@ AudioOutput AudioEngine::processSample(float input)
 	noiseSignal = highPassFilter_.processSample(noiseSignal);
 	noiseSignal = delay_4.processSample(noiseSignal);
 
-	AudioOutput out1 = panner_ch1_.processSample(oscSignal_1 + oscSignal_2);
+	AudioOutput out1 = panner_ch1_.processSample(oscSignal_2);
 	AudioOutput out2 = panner_ch2_.processSample(oscSignal_3 + noiseSignal);
+	AudioOutput mono = panner_mono.processSample(oscSignal_1);
 
 	AudioOutput sum;
 
-	sum.left = out1.left + out2.left;
-	sum.right = out1.right + out2.right;
+	sum.left = out1.left + out2.left + mono.mono;
+	sum.right = out1.right + out2.right + mono.mono;
 
 	return sum;
 
@@ -258,6 +260,17 @@ Panner& AudioEngine::getPanner_ch2()
 const Panner& AudioEngine::getPanner_ch2() const
 {
 	return panner_ch2_;
+}
+
+
+Panner& AudioEngine::getPanner_mono()
+{
+	return panner_mono;
+}
+
+const Panner& AudioEngine::getPanner_mono() const
+{
+	return panner_mono;
 }
 
 Sequencer& AudioEngine::getSequencer()

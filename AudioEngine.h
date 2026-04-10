@@ -35,6 +35,9 @@ public:
 	Panner& getPanner_ch2();
 	const Panner& getPanner_ch2() const;
 
+	Panner& getPanner_mono();
+	const Panner& getPanner_mono() const;
+
 	Sequencer& getSequencer();
 	const Sequencer& getSequencer() const;
 
@@ -123,6 +126,8 @@ private:
 	Panner panner_ch1_;
 
 	Panner panner_ch2_;
+
+	Panner panner_mono;
 
 	Sequencer sequencer_1;
 

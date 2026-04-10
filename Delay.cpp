@@ -59,7 +59,7 @@ void Delay::setDelayTimeMs(float delayTimeMs)
 void Delay::setFeedback(float feedback)
 {
 
-	feedback_ = std::clamp(feedback, 0.0f, 0.95f);
+	feedback_ = std::clamp(feedback, 0.0f, 1.25f);
 }
 
 void Delay::setWetLevel(float wetLevel)

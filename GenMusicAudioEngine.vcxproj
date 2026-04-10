@@ -150,6 +150,7 @@
     <ClCompile Include="NotePitch.cpp" />
     <ClCompile Include="NoteValue.cpp" />
     <ClCompile Include="Oscillator.cpp" />
+    <ClCompile Include="Oscilloscope.cpp" />
     <ClCompile Include="Panner.cpp" />
     <ClCompile Include="Scale.cpp" />
     <ClCompile Include="Sequencer.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="NotePitch.h" />
     <ClInclude Include="NoteValue.h" />
     <ClInclude Include="Oscillator.h" />
+    <ClInclude Include="Oscilloscope.h" />
     <ClInclude Include="Panner.h" />
     <ClInclude Include="Scale.h" />
     <ClInclude Include="Sequencer.h" />

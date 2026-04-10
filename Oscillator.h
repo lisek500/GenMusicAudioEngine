@@ -1,6 +1,7 @@
 #pragma once
 #include "WaveType.h"
 #include "NotePitch.h"
+#include <vector>
 
 
 class Oscillator
@@ -21,6 +22,8 @@ public:
 	float processSample();
 
 private:
+
+	std::vector<float> waveTable_;
 
 	double phase_ = 0.0;
 

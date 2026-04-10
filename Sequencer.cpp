@@ -29,7 +29,7 @@ bool Sequencer::bConsumeLoopWrapped(bool bHasPendingUpdate)
 		{
 			bLoopWrapped_ = false;
 			//std::srand(std::time({}));
-			std::cout << "loop changed";
+			//std::cout << "loop changed";
 			return true;
 
 		
@@ -56,7 +56,7 @@ void Sequencer::nextStep()
 	
 	stepDurationSamples_ = NoteValueClass::noteDuration(steps_[currentStep_].duration) * (4.0 * 60.0 / BPM_) * sampleRate_;
 	
-	std::cout << currentStep_;
+	//std::cout << currentStep_;
 }
 
 void Sequencer::update(float energy)
