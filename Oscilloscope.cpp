@@ -16,7 +16,7 @@ void Oscilloscope::pushSample(float sampleLeft, float sampleRight)
 	writeIndex_ = (writeIndex_ + 2) % 2048;
 }
 
-const std::array<float, 2048>& Oscilloscope::getSnapshot() const
+std::array<float, 2048> Oscilloscope::getSnapshot() const
 {
 	return buffer_;
 }

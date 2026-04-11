@@ -11,14 +11,14 @@ public:
 	
 	void pushSample(float sampleLeft,float sampleRight);
 
-	const std::array<float, 2048>& getSnapshot() const;
+	std::array<float, 2048> getSnapshot() const;
 
 private:
 	std::array<float, 2048> buffer_;
 
 	std::atomic<int> writeIndex_;
 
-	std::atomic<int> readIndex_;
+	//std::atomic<int> readIndex_;
 
 	
 

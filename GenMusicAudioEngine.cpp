@@ -155,7 +155,8 @@ int main()
 				const auto buffer = data.oscilloscope.getSnapshot();
 				char grid[20][80];
 
-				system("cls");
+				std::cout << "\x1B[2J\x1B[H";
+				std::cout.flush();
 				
 				memset(grid, ' ', sizeof(grid));
 
