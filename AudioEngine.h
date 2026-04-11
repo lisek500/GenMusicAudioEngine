@@ -1,5 +1,5 @@
 #pragma once
-#include "delay.h"
+#include "Delay.h"
 #include "EnvFollower.h"
 #include "LowPassFilter.h"
 #include "HighPassFilter.h"
