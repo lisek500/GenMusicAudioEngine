@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p dist/GenMusicAudioEngine-macos
           cp build/GenMusicAudioEngine dist/GenMusicAudioEngine-macos/
-          cp "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/
+          cp -L "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/
           install_name_tool -change "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" "@executable_path/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
           chmod +x dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
           printf '#!/bin/bash\nDIR="$(cd "$(dirname "$0")" && pwd)"\ncd "$DIR"\n./GenMusicAudioEngine\n' > dist/GenMusicAudioEngine-macos/Start.command
