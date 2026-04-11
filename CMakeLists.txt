@@ -24,7 +24,11 @@ add_executable(GenMusicAudioEngine
 
 target_include_directories(GenMusicAudioEngine PRIVATE .)
 
-target_include_directories(GenMusicAudioEngine PRIVATE "C:/Users/mati5/Desktop/Programming/Libs/portaudio/include")
-
-target_link_libraries(GenMusicAudioEngine PRIVATE "C:/Users/mati5/Desktop/Programming/Libs/portaudio-build/Release/portaudio_static_x64.lib")
-
+if(APPLE)
+    target_include_directories(GenMusicAudioEngine PRIVATE /opt/homebrew/include)
+    target_link_directories(GenMusicAudioEngine PRIVATE /opt/homebrew/lib)
+    target_link_libraries(GenMusicAudioEngine PRIVATE portaudio)
+elseif(WIN32)
+    target_include_directories(GenMusicAudioEngine PRIVATE "C:/Users/mati5/Desktop/Programming/Libs/portaudio/include")
+    target_link_libraries(GenMusicAudioEngine PRIVATE "C:/Users/mati5/Desktop/Programming/Libs/portaudio-build/Release/portaudio_static_x64.lib")
+endif()
