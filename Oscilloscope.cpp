@@ -4,7 +4,7 @@ void Oscilloscope::prepare()
 {
 	writeIndex_ = 0;
 
-	readIndex_ = 0;
+	//readIndex_ = 0;
 }
 
 void Oscilloscope::pushSample(float sampleLeft, float sampleRight)
