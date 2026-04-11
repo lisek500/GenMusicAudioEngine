@@ -31,11 +31,18 @@ jobs:
         run: |
           mkdir -p dist/GenMusicAudioEngine-macos
           cp build/GenMusicAudioEngine dist/GenMusicAudioEngine-macos/
-          cp -L "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/
+
+          REAL_PORTAUDIO_LIB=$(python3 -c 'import os; print(os.path.realpath("'"$(brew --prefix portaudio)"'/lib/libportaudio.2.dylib"))')
+          cp "$REAL_PORTAUDIO_LIB" dist/GenMusicAudioEngine-macos/libportaudio.2.dylib
+
           install_name_tool -change "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" "@executable_path/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
+
           chmod +x dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
           printf '#!/bin/bash\nDIR="$(cd "$(dirname "$0")" && pwd)"\ncd "$DIR"\n./GenMusicAudioEngine\n' > dist/GenMusicAudioEngine-macos/Start.command
           chmod +x dist/GenMusicAudioEngine-macos/Start.command
+
+          ls -lah dist/GenMusicAudioEngine-macos
+          file dist/GenMusicAudioEngine-macos/libportaudio.2.dylib
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
