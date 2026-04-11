@@ -19,19 +19,17 @@ jobs:
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build --config Release
-      - name: Prepare app bundle
+      - name: Prepare distributable folder
         run: |
-          mkdir -p dist/GenMusicAudioEngine.app/Contents/MacOS
-          mkdir -p dist/GenMusicAudioEngine.app/Contents/Frameworks
-
-          cp build/GenMusicAudioEngine dist/GenMusicAudioEngine.app/Contents/MacOS/
-
+          mkdir -p dist/GenMusicAudioEngine-macos
+          cp build/GenMusicAudioEngine dist/GenMusicAudioEngine-macos/
           REAL_PORTAUDIO_LIB=$(python3 -c 'import os; print(os.path.realpath("'"$(brew --prefix portaudio)"'/lib/libportaudio.2.dylib"))')
-          cp "$REAL_PORTAUDIO_LIB" dist/GenMusicAudioEngine.app/Contents/Frameworks/libportaudio.2.dylib
-
-          install_name_tool -change "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" "@executable_path/../Frameworks/libportaudio.2.dylib" dist/GenMusicAudioEngine.app/Contents/MacOS/GenMusicAudioEngine
-
-          cat > dist/GenMusicAudioEngine.app/Contents/Info.plist <<'EOF'
+          cp "$REAL_PORTAUDIO_LIB" dist/GenMusicAudioEngine-macos/libportaudio.2.dylib
+          install_name_tool -change "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" "@executable_path/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
+          chmod +x dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
+          codesign --force --sign - dist/GenMusicAudioEngine-macos/libportaudio.2.dylib
+          codesign --force --sign - dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
+          cat > dist/GenMusicAudioEngine-macos/Info.plist <<'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -46,21 +44,26 @@ jobs:
               <string>1.0</string>
               <key>NSMicrophoneUsageDescription</key>
               <string>This app needs microphone access for audio input</string>
-              <key>NSAudioInputUsageDescription</key>
-              <string>This app needs audio input access</string>
           </dict>
           </plist>
           EOF
-
-          chmod +x dist/GenMusicAudioEngine.app/Contents/MacOS/GenMusicAudioEngine
-
-          codesign --force --sign - dist/GenMusicAudioEngine.app/Contents/Frameworks/libportaudio.2.dylib
-          codesign --force --sign - dist/GenMusicAudioEngine.app
-
-          otool -L dist/GenMusicAudioEngine.app/Contents/MacOS/GenMusicAudioEngine
-
+          cat > dist/GenMusicAudioEngine-macos/Start.command <<'EOF'
+          #!/bin/bash
+          DIR="$(cd "$(dirname "$0")" && pwd)"
+          cd "$DIR" || exit 1
+          echo "DIR=$DIR"
+          xattr -cr "$DIR"
+          chmod u+w "$DIR/libportaudio.2.dylib" "$DIR/GenMusicAudioEngine"
+          codesign --remove-signature "$DIR/libportaudio.2.dylib" 2>/dev/null || true
+          codesign --remove-signature "$DIR/GenMusicAudioEngine" 2>/dev/null || true
+          codesign --force --timestamp=none --sign - "$DIR/libportaudio.2.dylib" || exit 1
+          codesign --force --timestamp=none --sign - "$DIR/GenMusicAudioEngine" || exit 1
+          ./GenMusicAudioEngine
+          EOF
+          chmod +x dist/GenMusicAudioEngine-macos/Start.command
+          otool -L dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: GenMusicAudioEngine-macos
-          path: dist/GenMusicAudioEngine.app
+          path: dist/GenMusicAudioEngine-macos
