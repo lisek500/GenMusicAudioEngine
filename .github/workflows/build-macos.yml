@@ -18,6 +18,9 @@ jobs:
       - name: Install PortAudio
         run: brew install portaudio
 
+              - name: Clean build dir
+        run: rm -rf build
+
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
