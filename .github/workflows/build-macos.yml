@@ -38,16 +38,18 @@ jobs:
           install_name_tool -change "$(brew --prefix portaudio)/lib/libportaudio.2.dylib" "@executable_path/libportaudio.2.dylib" dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
 
           chmod +x dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
-          printf '#!/bin/bash\nDIR="$(cd "$(dirname "$0")" && pwd)"\ncd "$DIR"\n./GenMusicAudioEngine\n' > dist/GenMusicAudioEngine-macos/Start.command
+          codesign --force --sign - dist/GenMusicAudioEngine-macos/libportaudio.2.dylib
+          codesign --force --sign - dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
+          printf '#!/bin/bash\nDIR="$(cd "$(dirname "$0")" && pwd)"\nxattr -dr com.apple.quarantine "$DIR" 2>/dev/null\ncodesign --force --sign - "$DIR/libportaudio.2.dylib" 2>/dev/null\ncodesign --force --sign - "$DIR/GenMusicAudioEngine" 2>/dev/null\ncd "$DIR"\n./GenMusicAudioEngine\n' > dist/GenMusicAudioEngine-macos/Start.command
           chmod +x dist/GenMusicAudioEngine-macos/Start.command
 
           ls -lah dist/GenMusicAudioEngine-macos
           file dist/GenMusicAudioEngine-macos/libportaudio.2.dylib
 
-              ls -lah dist/GenMusicAudioEngine-macos
-              du -sh dist/GenMusicAudioEngine-macos
-              stat -f "%N %z bytes" dist/GenMusicAudioEngine-macos/*
-              otool -L dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
+          ls -lah dist/GenMusicAudioEngine-macos
+          du -sh dist/GenMusicAudioEngine-macos
+          stat -f "%N %z bytes" dist/GenMusicAudioEngine-macos/*
+          otool -L dist/GenMusicAudioEngine-macos/GenMusicAudioEngine
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
