@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Delay.cpp" />
     <ClCompile Include="GenMusicAudioEngine.cpp" />
     <ClCompile Include="EnvFollower.cpp" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioOutput.h" />
+    <ClInclude Include="Compressor.h" />
     <ClInclude Include="Delay.h" />
     <ClInclude Include="EnvFollower.h" />
     <ClInclude Include="HighPassFilter.h" />
