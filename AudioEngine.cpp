@@ -10,6 +10,22 @@ void AudioEngine::prepare(double sampleRate, int blockSize)
 	blockSize_ = blockSize;
 	
 	
+	//compressor and limiter
+	compressor_left_.prepare(sampleRate_, true, 5);
+	compressor_right_.prepare(sampleRate_, true, 5);
+
+	compressor_left_.setAttack(0.1f);
+	compressor_right_.setAttack(0.1f);
+
+	compressor_left_.setRelease(0.01f);
+	compressor_right_.setRelease(0.01f);
+
+	compressor_left_.setRatio(4.0f);
+	compressor_right_.setRatio(4.0f);
+
+	compressor_left_.setThreshold(-1.5f);
+	compressor_right_.setThreshold(-1.5f);
+
 	
 	
 	//envelope
@@ -17,8 +33,17 @@ void AudioEngine::prepare(double sampleRate, int blockSize)
 	envelopeFollower_.setRelease(0.001f);
 	//oscillators
 	oscillator_1.prepare(sampleRate_);
+	oscillator_1.setWaveType(WaveType::Harmonic);
+	oscillator_1.setPulseWidth(0.95f);
+	oscillator_1.setNumHarmonics(16);
+
 	oscillator_2.prepare(sampleRate_);
+	oscillator_2.setWaveType(WaveType::Pulse); 
+	oscillator_2.setPulseWidth(0.95f);
+
 	oscillator_3.prepare(sampleRate_);
+	oscillator_3.setWaveType(WaveType::Pulse);
+	oscillator_3.setPulseWidth(0.15f);
 
 	//sequencer 
 	BPM_ = 30.0f;
@@ -77,6 +102,8 @@ void AudioEngine::reset()
 	delay_2.reset();
 	delay_3.reset();
 	delay_4.reset();
+	compressor_left_.reset();
+	compressor_right_.reset();
 
 }
 
@@ -84,9 +111,6 @@ AudioOutput AudioEngine::processSample(float input)
 {
 	float x = input * gain_;
 	
-	
-	
-
 	//float signal = lowpass + highpass;
 
 	float env = envelopeFollower_.processSample(input);
@@ -152,23 +176,16 @@ AudioOutput AudioEngine::processSample(float input)
 	//float envValue = frequencyMin_ + env * (frequencyMax_ - frequencyMin_);
 	
 	//oscillator 1
-	oscillator_1.setWaveType(WaveType::Sine);
-	
 	oscillator_1.setFrequency(frequency);
 
 	float frequencyOsc1 = oscillator_1.processSample();
 
 	//oscillator 2
-	oscillator_2.setWaveType(WaveType::Sine);
-	
 	oscillator_2.setFrequency(frequency_2);
 
 	float frequencyOsc2 = oscillator_2.processSample();
 
 	//oscillator 3
-	oscillator_3.setWaveType(WaveType::Sinc);
-
-	
 	oscillator_3.setFrequency(frequency_3);
 
 	float frequencyOsc3 = oscillator_3.processSample();
@@ -213,14 +230,20 @@ AudioOutput AudioEngine::processSample(float input)
 	noiseSignal = highPassFilter_.processSample(noiseSignal);
 	noiseSignal = delay_4.processSample(noiseSignal);
 
+
 	AudioOutput out1 = panner_ch1_.processSample(oscSignal_2);
 	AudioOutput out2 = panner_ch2_.processSample(oscSignal_3 + noiseSignal);
 	AudioOutput mono = panner_mono.processSample(oscSignal_1);
 
 	AudioOutput sum;
 
+
 	sum.left = out1.left + out2.left + mono.mono;
 	sum.right = out1.right + out2.right + mono.mono;
+
+	//limiting
+	sum.left = compressor_left_.processSample(out1.left + out2.left + mono.mono);
+	sum.right = compressor_right_.processSample(out1.right + out2.right + mono.mono);
 
 	return sum;
 
@@ -240,6 +263,26 @@ void AudioEngine::setOscGain(float gain1, float gain2, float gain3)
 	oscGain_1 = gain1;
 	oscGain_2 = gain2;
 	oscGain_3 = gain3;
+}
+
+Compressor& AudioEngine::getCompressorLeft()
+{
+	return compressor_left_;
+}
+
+const Compressor& AudioEngine::getCompressorLeft() const
+{
+	return compressor_left_;
+}
+
+Compressor& AudioEngine::getCompressorRight()
+{
+	return compressor_right_;
+}
+
+const Compressor& AudioEngine::getCompressorRight() const
+{
+	return compressor_right_;
 }
 
 Panner& AudioEngine::getPanner_ch1()

@@ -17,6 +17,10 @@ public:
 
 	void setFrequency(float frequency);
 
+	void setPulseWidth(float width);
+
+	void setNumHarmonics(int num);
+
 	float sinc(float x) const;
 
 	float processSample();
@@ -34,6 +38,10 @@ private:
 	double phaseIncrement_ = 0.0;
 
 	const float pi = 3.14159265358979323846f;
+
+	float pulseWidth_ = 0.5f;
+
+	int numHarmonics_ = 8;
 
 	WaveType waveType_ = WaveType::Sine;
 

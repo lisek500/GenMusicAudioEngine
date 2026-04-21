@@ -28,6 +28,7 @@ private:
 	int writeIndex_;
 	int readIndex_;
 	int lookaheadSamples_;
+	float delayedSample_;
 
 	bool bLimiter_ = false;
 

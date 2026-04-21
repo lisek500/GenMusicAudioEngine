@@ -9,6 +9,7 @@
 #include "LFO.h"
 #include "Sequencer.h"
 #include "Scale.h"
+#include "Compressor.h"
 
 
 
@@ -28,6 +29,12 @@ public:
 	void setOscGain(float gain1, float gain2, float gain3);
 	
 	float getEnvelope() const;
+
+	Compressor& getCompressorLeft();
+	const Compressor& getCompressorLeft() const;
+
+	Compressor& getCompressorRight();
+	const Compressor& getCompressorRight() const;
 
 	Panner& getPanner_ch1();
 	const Panner& getPanner_ch1() const;
@@ -122,6 +129,9 @@ private:
 
 	//float frequencyMax_ = 110.0f;
 	
+	Compressor compressor_left_;
+
+	Compressor compressor_right_;
 
 	Panner panner_ch1_;
 

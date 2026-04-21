@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ADSR.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Delay.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="WhiteNoiseGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ADSR.h" />
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioOutput.h" />
     <ClInclude Include="Compressor.h" />
@@ -173,6 +175,7 @@
     <ClInclude Include="Panner.h" />
     <ClInclude Include="Scale.h" />
     <ClInclude Include="Sequencer.h" />
+    <ClInclude Include="Synthesizer.h" />
     <ClInclude Include="WaveType.h" />
     <ClInclude Include="WhiteNoiseGenerator.h" />
   </ItemGroup>

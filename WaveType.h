@@ -3,7 +3,12 @@ enum class WaveType
 {
 	Sine,
 	Square,
-	Sinc,
 	Saw,
+	Triangle,
+	Pulse,
+	Noise,
+	Harmonic,
+
+
 
 };

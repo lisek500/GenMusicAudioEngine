@@ -1,7 +1,7 @@
 #include "Compressor.h"
 #include <cmath>
 #include <algorithm>
-
+#include <iostream>
 
 
 void Compressor::prepare(double sampleRate, bool limiter, int lookahead)
@@ -47,24 +47,36 @@ void Compressor::setRelease(float release)
 
 float Compressor::processSample(float input)
 {	
-	readIndex_ = writeIndex_ - lookaheadSamples_;
-	if (readIndex_ < 0)
+	if (bLimiter_)
 	{
-		readIndex += static_cast<int>(buffer_.size());
+		readIndex_ = writeIndex_ - lookaheadSamples_;
+		if (readIndex_ < 0)
+		{
+			readIndex_ += static_cast<int>(buffer_.size());
+		}
+
+		 delayedSample_ = buffer_[readIndex_];
+
+
+		buffer_[writeIndex_] = input;
+
+		writeIndex_++;
+		if (writeIndex_ >= static_cast<int>(buffer_.size()))
+		{
+			writeIndex_ = 0;
+		}
+
 	}
-
-
-
-
-
-
+	
 	float inputMax = std::max(abs(input), 1e-6f);
 
 	float inputdB = 20 * log10(inputMax);
 
+	//std::cout << inputdB;
+
 	if (inputdB > threshold_)
 	{
-		if (bLimiter_ == true)
+		if (bLimiter_)
 		{
 			 gainReductiondB_ = inputdB - threshold_;
 		}
@@ -83,13 +95,18 @@ float Compressor::processSample(float input)
 			envelope_ += release_ * (gainReductiondB_ - envelope_);
 		}
 
-		float gain = pow(10, - gainReductiondB_ / 20);
+		float gain = pow(10, - envelope_ / 20);
 
-		return input * gain;
+		return (bLimiter_ ? delayedSample_ : input) * gain;
+		
 	}
 	else
 	{
-		return input;
+		envelope_ += release_ * (0.0f - envelope_);
+		float gain = pow(10, -envelope_ / 20);
+		return (bLimiter_ ? delayedSample_ : input) * gain;
+
+		
 	}
 }
 

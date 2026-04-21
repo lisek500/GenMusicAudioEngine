@@ -2,6 +2,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <random>
 
 void Oscillator::prepare(double sampleRate)
 {
@@ -9,19 +10,70 @@ void Oscillator::prepare(double sampleRate)
 
 	phaseIncrement_ = (2 * pi * frequency_) / sampleRate_;
 
-	waveTable_.resize(static_cast<int>(4096));
-	for (size_t i = 0; i < waveTable_.size(); i++)
-	{
-		waveTable_[i] = std::sin(2 * pi  * i / waveTable_.size());
-	}
+	waveTable_.resize(4096);
+
 }
 
 //pitch
+void Oscillator::setPulseWidth(float width)
+{
+	pulseWidth_ = width;
+}
 
+void Oscillator::setNumHarmonics(int num)
+{
+	numHarmonics_ = num;
+}
 
 void Oscillator::setWaveType(WaveType waveType)
 {
 	waveType_ = waveType;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+
+	for (size_t i = 0; i < waveTable_.size(); i++)
+	{
+		float t = static_cast<float>(i) / waveTable_.size();
+
+		switch (waveType_)
+		{
+		case WaveType::Sine:
+			waveTable_[i] = std::sin(2 * pi * t);
+			break;
+
+		case WaveType::Saw:
+			waveTable_[i] = 2.0f * t - 1.0f;
+			break;
+
+		case WaveType::Square:
+			waveTable_[i] = (t < 0.5f) ? 1.0f : -1.0f;
+			break;
+
+		case WaveType::Triangle:
+			waveTable_[i] = (t < 0.5f) ? (4.0f * t - 1.0f) : (3.0f - 4.0f * t);
+			break;
+
+		case WaveType::Pulse:
+			waveTable_[i] = (t < pulseWidth_) ? 1.0f : -1.0f;
+			break;
+
+		case WaveType::Noise:
+			waveTable_[i] = dist(gen);
+			break;
+
+		case WaveType::Harmonic:
+			waveTable_[i] = 0.0f;
+
+			for (int h = 1; h <= numHarmonics_; h++)
+			{
+				waveTable_[i] += std::sin(2 * pi * h * t) / static_cast<float>(h);
+			}
+			waveTable_[i] *= 0.5f;
+			break;
+		}
+	}
 }
 
 
@@ -89,32 +141,6 @@ float Oscillator::processSample()
 		phase_ -= 2 * pi;
 	}
 
-
-	switch (waveType_) 
-	{
-	
-	case WaveType::Sine:
-		
-		
-		return value;
-		
-		
-	case WaveType::Square:
-		
-		
-		if (phase_ < pi)
-		{
-			return 1.0f;
-		}
-		else
-		{
-			return -1.0f;
-		}
-
-	case WaveType::Sinc: return sinc(x);
-
-	}
-	return 0.0f;
-
+	return value;
 }
 

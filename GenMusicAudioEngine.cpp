@@ -82,8 +82,8 @@ int main()
 	data.engine.setOscGain(0.2f, 0.1f, 6.0f);
 
 	//ustawienia lowpass filter
-	data.engine.getLowPassFilter().setCutoffHz(2000.0f);
-	data.engine.getLowPassFilter_2().setCutoffHz(2000.0f);
+	data.engine.getLowPassFilter().setCutoffHz(200.0f);
+	data.engine.getLowPassFilter_2().setCutoffHz(200.0f);
 	//data.engine.getLowPassFilter_3().setCutoffHz(16000.0f);
 
 
