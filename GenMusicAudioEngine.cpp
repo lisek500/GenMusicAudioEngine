@@ -65,8 +65,15 @@ int main()
 	PaStream* stream = nullptr;
 	AudioData data;
 	
+	
+	
 	//prepare i gain
-	data.engine.prepare(48000.0, 64);
+	std::cout << "Podaj BPM: ";
+	float userBPM;
+	std::cin >> userBPM;
+
+
+	data.engine.prepare(48000.0, 64, userBPM );
 	data.engine.setGain(1.0f);
 	
 
@@ -75,11 +82,11 @@ int main()
 	//data.engine.getPanner_ch2().setPan(1.0f);
 
 	//noise
-	data.engine.getWhiteNoiseGenerator().setGain(0.95f);
+	data.engine.getWhiteNoiseGenerator().setGain(0.3f);
 
 	//oscillator
 	//data.engine.getOscillator().setFrequency(220.0f);
-	data.engine.setOscGain(0.2f, 0.1f, 6.0f);
+	data.engine.setOscGain(0.2f, 0.1f, 8.0f);
 
 	//ustawienia lowpass filter
 	data.engine.getLowPassFilter().setCutoffHz(200.0f);
@@ -102,7 +109,7 @@ int main()
 
 	//ustawienia delaya trzeciego
 	data.engine.getDelay_3().setDelayTimeMs(250.0f);
-	data.engine.getDelay_3().setFeedback(0.96f);
+	data.engine.getDelay_3().setFeedback(0.98f);
 	data.engine.getDelay_3().setWetLevel(1.0f);
 
 	//ustawienia delaya czwartego
@@ -146,7 +153,7 @@ int main()
 	}
 
 	//oscilloscope
-	std::atomic<bool> running = true;
+	std::atomic<bool> running = false;
 
 	std::thread displayThread([&]()
 		{

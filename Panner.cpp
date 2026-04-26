@@ -15,10 +15,19 @@ AudioOutput Panner::processSample(float input)
 	AudioOutput output;
 
 	output.left = input * cos(pan_ * pi / 2);
-	
-	output.right = input * sin(pan_ * pi / 2); 
+	output.right = input * sin(pan_ * pi / 2);
 
-	output.mono = input;
+	return output;
+}
+
+AudioOutput Panner::processSample(AudioOutput input)
+{
+	AudioOutput output;
+
+	output.left = input.left * cos(pan_ * pi / 2) + input.right * sin((1-pan_) * pi / 2);
+	
+	output.right = input.right * cos(pan_ * pi / 2) + input.left * sin((2 - pan_) * pi / 2);
+
 
 		return output;
 

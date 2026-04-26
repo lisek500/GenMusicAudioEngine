@@ -5,11 +5,13 @@
 #include "HighPassFilter.h"
 #include "WhiteNoiseGenerator.h"
 #include "Oscillator.h"
+#include "Synthesizer.h"
 #include "Panner.h"
 #include "LFO.h"
 #include "Sequencer.h"
 #include "Scale.h"
 #include "Compressor.h"
+#include "MarkovChain.h"
 
 
 
@@ -18,7 +20,7 @@
 class AudioEngine
 {
 public:
-	void prepare(double sampleRate, int blockSize);
+	void prepare(double sampleRate, int blockSize, float BPM);
 	void reset();
 
 	AudioOutput processSample(float input);
@@ -45,6 +47,8 @@ public:
 	Panner& getPanner_mono();
 	const Panner& getPanner_mono() const;
 
+	MarkovChain& getMarkov_1();
+
 	Sequencer& getSequencer();
 	const Sequencer& getSequencer() const;
 
@@ -53,6 +57,8 @@ public:
 
 	Sequencer& getSequencer_3();
 	const Sequencer& getSequencer_3() const;
+
+	Sequencer& getSequencer_4();
 
 	ScaleClass& getScale();
 	const ScaleClass& getScale() const;
@@ -66,14 +72,13 @@ public:
 	WhiteNoiseGenerator& getWhiteNoiseGenerator();
 	const WhiteNoiseGenerator& getWhiteNoiseGenerator() const;
 
-	Oscillator& getOscillator_1();
-	const Oscillator& getOscillator_1() const;
+	Synthesizer& getSynth_1();
 
-	Oscillator& getOscillator_2();
-	const Oscillator& getOscillator_2() const;
+	Synthesizer& getSynth_2();
 
-	Oscillator& getOscillator_3();
-	const Oscillator& getOscillator_3() const;
+	Synthesizer& getSynth_3();
+
+	Synthesizer& getSynth_4();
 
 	LFO& getLFO();
 	const LFO& getLFO() const;
@@ -106,6 +111,8 @@ public:
 	const Delay& getDelay_4() const;
 
 private:
+	int getEnergyState(float env);
+
 	double sampleRate_ = 48000.0;
 	int blockSize_ = 64;
 
@@ -125,6 +132,20 @@ private:
 
 	int scaleSize_3 = 0;
 
+	int lastEnergyStateForRhythm_ = -1;
+
+	int rhythmCooldown_ = 0;
+
+	int lastStepIndex_1 = -1;
+
+	int lastStepIndex_4 = -1;
+
+	int lastScaleDegree_1 = -1;
+
+	int lastScaleDegree_2 = -1;
+
+	int lastScaleDegree_3 = -1;
+
 	//float frequencyMin_ = 110.0f;
 
 	//float frequencyMax_ = 110.0f;
@@ -139,11 +160,15 @@ private:
 
 	Panner panner_mono;
 
+	MarkovChain markov_1;
+
 	Sequencer sequencer_1;
 
 	Sequencer sequencer_2;
 
 	Sequencer sequencer_3;
+
+	Sequencer sequencer_4;
 
 	ScaleClass scale_1;
 
@@ -153,11 +178,13 @@ private:
 
 	WhiteNoiseGenerator noiseGenerator_;
 
-	Oscillator oscillator_1;
+	Synthesizer synth_1;
 
-	Oscillator oscillator_2;
+	Synthesizer synth_2;
 
-	Oscillator oscillator_3;
+	Synthesizer synth_3;
+
+	Synthesizer synth_4;
 
 	LFO lfo_;
 

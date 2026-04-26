@@ -1,4 +1,5 @@
 #pragma once
+#include "AudioOutput.h"
 
 class HighPassFilter
 {
@@ -8,6 +9,8 @@ public:
 	void reset();
 
 	float processSample(float input);
+	AudioOutput processSample(AudioOutput input);
+
 	void setCutoffHz(float cutoffHz);
 
 private:

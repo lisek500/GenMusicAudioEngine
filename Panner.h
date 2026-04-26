@@ -8,6 +8,7 @@ public:
 	void setPan(float pan);
 
 	AudioOutput processSample(float input);
+	AudioOutput processSample(AudioOutput input);
 
 private:
 

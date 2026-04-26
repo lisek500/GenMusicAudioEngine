@@ -110,3 +110,12 @@ float Compressor::processSample(float input)
 	}
 }
 
+AudioOutput Compressor::processSample(AudioOutput input)
+{
+	AudioOutput out;
+
+	out.left = processSample(input.left);
+	out.right = processSample(input.right);
+
+	return out;
+}

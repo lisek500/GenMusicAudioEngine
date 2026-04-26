@@ -26,6 +26,7 @@ public:
 
 	void setStep(int index, int scaleDegree, NoteValue duration);
 
+	void setAllStepsDuration(NoteValue duration);
 
 	void generateRandomSteps(int stepCount, int scaleSize, NoteValue duration);
 
@@ -33,6 +34,8 @@ public:
 	void setSteps(Step newSteps[], int stepCount);
 
 	bool bConsumeLoopWrapped(bool bHasPendingUpdate);
+
+	int getCurrentStepIndex();
 
 
 private:

@@ -41,3 +41,13 @@ float HighPassFilter::processSample(float input)
 	y1_ = y;
 	return y;
 }
+
+AudioOutput HighPassFilter::processSample(AudioOutput input)
+{
+	AudioOutput out;
+
+	out.left = processSample(input.left);
+	out.right = processSample(input.right);
+
+	return out;
+}

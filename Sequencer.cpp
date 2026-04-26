@@ -78,6 +78,11 @@ Step Sequencer::getCurrentStep()
 	return steps_[currentStep_];
 }
 
+int Sequencer::getCurrentStepIndex()
+{
+	return currentStep_;
+}
+
 int Sequencer::setStepCount(int stepCount)
 {
 	if (stepCount < 1)
@@ -107,6 +112,14 @@ void Sequencer::setStep(int index, int scaleDegree, NoteValue duration)
 	steps_[index].scaleDegree = scaleDegree;
 	steps_[index].duration = duration;
 
+}
+
+void Sequencer::setAllStepsDuration(NoteValue duration)
+{
+	for (int i = 0; i < stepCount_; i++)
+	{
+		steps_[i].duration = duration;
+	}
 }
 
 void Sequencer::generateRandomSteps(int stepCount, int scaleSize, NoteValue duration)

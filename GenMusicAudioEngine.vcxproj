@@ -149,6 +149,7 @@
     <ClCompile Include="HighPassFilter.cpp" />
     <ClCompile Include="LFO.cpp" />
     <ClCompile Include="LowPassFilter.cpp" />
+    <ClCompile Include="MarkovChain.cpp" />
     <ClCompile Include="NotePitch.cpp" />
     <ClCompile Include="NoteValue.cpp" />
     <ClCompile Include="Oscillator.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Panner.cpp" />
     <ClCompile Include="Scale.cpp" />
     <ClCompile Include="Sequencer.cpp" />
+    <ClCompile Include="Synthesizer.cpp" />
     <ClCompile Include="WhiteNoiseGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,7 @@
     <ClInclude Include="HighPassFilter.h" />
     <ClInclude Include="LFO.h" />
     <ClInclude Include="LowPassFilter.h" />
+    <ClInclude Include="MarkovChain.h" />
     <ClInclude Include="NotePitch.h" />
     <ClInclude Include="NoteValue.h" />
     <ClInclude Include="Oscillator.h" />

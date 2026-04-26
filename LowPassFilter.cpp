@@ -36,3 +36,12 @@ float LowPassFilter::processSample(float input)
 	return z1_;
 }
 
+AudioOutput LowPassFilter::processSample(AudioOutput input)
+{
+	AudioOutput out;
+
+	out.left = processSample(input.left);
+	out.right = processSample(input.right);
+
+	return out;
+}

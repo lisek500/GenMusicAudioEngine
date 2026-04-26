@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include "AudioOutput.h"
 
 class Compressor
 {
@@ -10,6 +11,9 @@ public:
 	void reset();
 
 	float processSample(float input);
+	AudioOutput processSample(AudioOutput input);
+
+
 	float getEnvelope() const;
 
 	void setThreshold(float threshold);

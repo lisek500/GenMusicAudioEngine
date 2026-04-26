@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "AudioOutput.h"
 
 class Delay
 {
@@ -9,8 +10,7 @@ public:
 	void reset();
 
 	float processSample(float input);
-
-	
+	AudioOutput processSample(AudioOutput input);
 
 	void setDelayTimeMs(float delayTimeMs);
 	void setFeedback(float feedback);
