@@ -5,10 +5,11 @@
 #include <thread>
 #include <chrono>
 #include <algorithm>
+#include <cstring>
+#include <portaudio.h>
 #include "AudioEngine.h"
 #include "AudioOutput.h"
 #include "Oscilloscope.h"
-#include "portaudio.h"
 
 
 struct AudioData

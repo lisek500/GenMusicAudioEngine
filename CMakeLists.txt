@@ -6,6 +6,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(GenMusicAudioEngine
     GenMusicAudioEngine.cpp
+    Compressor.cpp
+    Synthesizer.cpp
+    MarkovChain.cpp
+    ADSR.cpp
  	AudioEngine.cpp
 	Delay.cpp
 	EnvFollower.cpp
@@ -24,7 +28,12 @@ add_executable(GenMusicAudioEngine
 
 target_include_directories(GenMusicAudioEngine PRIVATE .)
 
-if(APPLE)
+
+if(UNIX)
+    target_include_directories(GenMusicAudioEngine PRIVATE /usr/include)
+    target_link_directories(GenMusicAudioEngine PRIVATE /usr/lib)
+    target_link_libraries(GenMusicAudioEngine PRIVATE portaudio)
+elseif(APPLE)
     target_include_directories(GenMusicAudioEngine PRIVATE /opt/homebrew/include)
     target_link_directories(GenMusicAudioEngine PRIVATE /opt/homebrew/lib)
     target_link_libraries(GenMusicAudioEngine PRIVATE portaudio)

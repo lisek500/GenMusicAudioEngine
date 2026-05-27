@@ -1,6 +1,5 @@
 #include "AudioEngine.h"
-#include <cmath>
-#include <algorithm>
+#include <portaudio.h>
 #include <iostream>
 
 

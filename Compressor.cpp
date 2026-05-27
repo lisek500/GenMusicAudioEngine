@@ -1,6 +1,7 @@
 #include "Compressor.h"
 #include <cmath>
 #include <algorithm>
+#include <stdlib.h>
 #include <iostream>
 
 
